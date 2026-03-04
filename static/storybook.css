@@ -1,0 +1,130 @@
+:root {
+  --bg: #ffffff;
+  --text: #1f2328;
+  --text-secondary: #656d76;
+  --text-tertiary: #8b949e;
+  --border: #d0d7de;
+  --surface: #f6f8fa;
+  --accent: #0969da;
+  --accent-text: #fff;
+  --tag-bg: #ddf4ff;
+  --tag-text: #0969da;
+  --danger: #cf222e;
+  --badge-bg: #eaeef2;
+  --badge-text: #656d76;
+  --spinner-track: #d0d7de;
+  --spinner-accent: #0969da;
+  --iframe-bg: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1117;
+    --text: #c9d1d9;
+    --text-secondary: #8b949e;
+    --text-tertiary: #484f58;
+    --border: #30363d;
+    --surface: #161b22;
+    --accent: #1f6feb;
+    --accent-text: #fff;
+    --tag-bg: #30363d;
+    --tag-text: #8b949e;
+    --danger: #da3633;
+    --badge-bg: #30363d;
+    --badge-text: #8b949e;
+    --spinner-track: #30363d;
+    --spinner-accent: #58a6ff;
+    --iframe-bg: #fff;
+  }
+}
+
+[data-theme="dark"] {
+  --bg: #0d1117;
+  --text: #c9d1d9;
+  --text-secondary: #8b949e;
+  --text-tertiary: #484f58;
+  --border: #30363d;
+  --surface: #161b22;
+  --accent: #1f6feb;
+  --accent-text: #fff;
+  --tag-bg: #30363d;
+  --tag-text: #8b949e;
+  --danger: #da3633;
+  --badge-bg: #30363d;
+  --badge-text: #8b949e;
+  --spinner-track: #30363d;
+  --spinner-accent: #58a6ff;
+  --iframe-bg: #fff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: var(--text); }
+
+#loading {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 40px 0; gap: 12px; color: var(--text-secondary);
+}
+.spinner {
+  width: 28px; height: 28px; border: 3px solid var(--spinner-track); border-top-color: var(--spinner-accent);
+  border-radius: 50%; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+#loading .hint { font-size: 12px; color: var(--text-tertiary); }
+
+#story-header {
+  display: none; background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 10px 14px; font-size: 12px;
+}
+#story-header .header-row {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+#story-header .component-title {
+  font-size: 14px; font-weight: 600; color: var(--text);
+}
+#story-header .story-variant {
+  font-size: 11px; padding: 2px 8px; border-radius: 10px;
+  background: var(--accent); color: var(--accent-text); font-weight: 500;
+}
+#story-header .meta-row {
+  display: flex; gap: 16px; margin-top: 6px; color: var(--text-secondary); font-size: 11px;
+}
+#story-header .meta-item { display: flex; align-items: center; gap: 4px; }
+#story-header .meta-label { color: var(--text-tertiary); }
+#story-header .meta-value { color: var(--text-secondary); font-family: monospace; font-size: 11px; }
+#story-header .tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+#story-header .tag {
+  font-size: 10px; padding: 1px 6px; border-radius: 8px;
+  background: var(--tag-bg); color: var(--tag-text);
+}
+
+body.loaded #loading { display: none; }
+body.loaded #story-header { display: block; }
+body.loaded #preview-frame { display: block; }
+
+#preview-frame {
+  width: 100%; border: none; display: none;
+  background: var(--iframe-bg); min-height: 80px;
+}
+
+body.completed-state { min-height: auto !important; height: auto !important; overflow: visible !important; }
+body.completed-state #loading,
+body.completed-state #story-header,
+body.completed-state #preview-frame { display: none !important; }
+
+#completed-banner {
+  display: none; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  font-size: 13px; color: var(--text);
+  background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+}
+body.completed-state #completed-banner { display: flex; }
+#completed-banner .outdated-badge {
+  font-size: 11px; padding: 3px 10px; border-radius: 10px;
+  background: var(--danger); color: #fff; font-weight: 600;
+  letter-spacing: 0.3px; white-space: nowrap;
+}
+#completed-banner .story-badge {
+  font-size: 11px; padding: 2px 8px; border-radius: 10px;
+  background: var(--badge-bg); color: var(--badge-text); font-family: monospace;
+}
+

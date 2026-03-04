@@ -1,0 +1,48 @@
+:root {
+  --debug-bg: rgba(255,255,255,0.95);
+  --debug-text: #116329;
+  --debug-border: rgba(0,150,0,0.3);
+  --debug-btn-bg: rgba(0,150,0,0.15);
+  --debug-btn-border: rgba(0,150,0,0.4);
+  --debug-btn-text: #116329;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --debug-bg: rgba(0,0,0,0.92);
+    --debug-text: #0f0;
+    --debug-border: rgba(0,200,0,0.3);
+    --debug-btn-bg: rgba(0,200,0,0.25);
+    --debug-btn-border: rgba(0,200,0,0.5);
+    --debug-btn-text: #0f0;
+  }
+}
+
+[data-theme="dark"] {
+  --debug-bg: rgba(0,0,0,0.92);
+  --debug-text: #0f0;
+  --debug-border: rgba(0,200,0,0.3);
+  --debug-btn-bg: rgba(0,200,0,0.25);
+  --debug-btn-border: rgba(0,200,0,0.5);
+  --debug-btn-text: #0f0;
+}
+
+body.completed-state #debug-toggle,
+body.completed-state #debug-log { display: none !important; }
+
+#debug-toggle {
+  position: fixed; bottom: 6px; right: 6px; width: 22px; height: 22px;
+  border-radius: 50%; background: var(--debug-btn-bg); border: 1px solid var(--debug-btn-border);
+  color: var(--debug-btn-text); font: bold 12px monospace; cursor: pointer; z-index: 100000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0.5; transition: opacity 0.2s;
+}
+#debug-toggle:hover { opacity: 1; }
+#debug-toggle.active { background: var(--debug-btn-bg); opacity: 1; }
+#debug-log {
+  display: none; position: fixed; bottom: 32px; left: 0; right: 0; max-height: 200px;
+  overflow-y: auto; background: var(--debug-bg); color: var(--debug-text);
+  font: 11px/1.4 monospace; padding: 8px; z-index: 99999;
+  border-top: 1px solid var(--debug-border);
+}
+#debug-log.open { display: block; }

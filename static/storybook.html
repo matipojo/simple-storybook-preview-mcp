@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Storybook Preview</title>
+  <style>%%MCP_APP_STYLES%% %%MCP_DEBUG_STYLES%%</style>
+</head>
+<body>
+  <div id="completed-banner">
+    <span class="outdated-badge">outdated preview</span>
+    <span class="story-badge" id="completed-story"></span>
+  </div>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <div>Waiting for component...</div>
+    <div class="hint">The agent will call render_component with a storyId</div>
+  </div>
+
+  <div id="story-header">
+    <div class="header-row">
+      <span class="component-title" id="h-title"></span>
+      <span class="story-variant" id="h-variant"></span>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item">
+        <span class="meta-label">file</span>
+        <span class="meta-value" id="h-file"></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">story</span>
+        <span class="meta-value" id="h-import"></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">export</span>
+        <span class="meta-value" id="h-export"></span>
+      </div>
+    </div>
+    <div class="tags" id="h-tags"></div>
+  </div>
+
+  <iframe id="preview-frame"></iframe>
+
+  <script>
+    (function() {
+      var debug = %%MCP_DEBUG%%;
+      if (debug) {
+        var logEl = document.createElement('div');
+        logEl.id = 'debug-log';
+        document.body.appendChild(logEl);
+
+        var toggleEl = document.createElement('div');
+        toggleEl.id = 'debug-toggle';
+        toggleEl.title = 'Toggle debug log';
+        toggleEl.textContent = 'D';
+        document.body.appendChild(toggleEl);
+
+        var isOpen = false;
+        toggleEl.addEventListener('click', function() {
+          isOpen = !isOpen;
+          logEl.classList.toggle('open', isOpen);
+          toggleEl.classList.toggle('active', isOpen);
+          if (isOpen) logEl.scrollTop = logEl.scrollHeight;
+        });
+
+        window._dl = function(msg, data) {
+          logEl.innerHTML += '<div>[' + new Date().toLocaleTimeString() + '] ' + msg + (data ? ' | ' + JSON.stringify(data) : '') + '</div>';
+          if (isOpen) logEl.scrollTop = logEl.scrollHeight;
+        };
+      } else {
+        window._dl = function() {};
+      }
+    })();
+  </script>
+
+  <script>%%MCP_APP_BUNDLE%%</script>
+
+  <script>
+    (function() {
+      var App = window.McpApp;
+      if (!App) {
+        window._dl('FATAL: no McpApp');
+        return;
+      }
+
+      var app = new App({ name: 'Storybook Preview', version: '1.0.0' });
+      var componentLoaded = false;
+      var lastStoryId = '';
+      var frame = document.getElementById('preview-frame');
+
+      function updateHeader(story) {
+        if (!story) return;
+        var title = story.title || '';
+        var name = story.name || '';
+        document.getElementById('h-title').textContent = title;
+        document.getElementById('h-variant').textContent = name;
+        document.getElementById('h-file').textContent = story.componentPath || '';
+        document.getElementById('h-import').textContent = story.importPath || '';
+        document.getElementById('h-export').textContent = story.exportName || '';
+
+        var tagsEl = document.getElementById('h-tags');
+        tagsEl.innerHTML = '';
+        var tags = story.tags || [];
+        for (var i = 0; i < tags.length; i++) {
+          var span = document.createElement('span');
+          span.className = 'tag';
+          span.textContent = tags[i];
+          tagsEl.appendChild(span);
+        }
+      }
+
+      function resizeFrame(height) {
+        frame.style.height = Math.max(80, height) + 'px';
+      }
+
+      window.addEventListener('message', function(event) {
+        if (event.data && event.data.type === 'storybook/docs-rendered') {
+          resizeFrame(event.data.height || 200);
+        }
+      });
+
+      frame.addEventListener('load', function() {
+        resizeFrame(200);
+        setTimeout(function() { resizeFrame(200); }, 500);
+      });
+
+      function applyTheme(theme) {
+        if (theme === 'light' || theme === 'dark') {
+          document.documentElement.setAttribute('data-theme', theme);
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+        }
+      }
+
+      function buildFrameUrl(url, theme) {
+        if (theme === 'dark') {
+          var sep = url.indexOf('?') === -1 ? '?' : '&';
+          return url + sep + 'globals=backgrounds.value:!hex(333333)';
+        }
+        return url;
+      }
+
+      function loadStory(url, storyId, story, theme) {
+        window._dl('loadStory', { url: url, storyId: storyId, theme: theme });
+        lastStoryId = storyId;
+        applyTheme(theme);
+        resizeFrame(200);
+        frame.src = buildFrameUrl(url, theme);
+        updateHeader(story);
+        document.body.classList.add('loaded');
+        document.body.classList.remove('completed-state');
+      }
+
+      function showCompletedState(storyId) {
+        document.getElementById('completed-story').textContent = storyId || lastStoryId || '';
+        document.body.classList.add('completed-state');
+        window._dl('completed-state', { storyId: storyId || lastStoryId });
+      }
+
+      app.ontoolinput = function(params) {
+        if (componentLoaded) {
+          showCompletedState((params.arguments || {}).storyId);
+        }
+      };
+
+      app.ontoolresult = function(result) {
+        var sc = result.structuredContent || {};
+        var url = sc.url;
+        if (!url) {
+          window._dl('ontoolresult: no url', sc);
+          return;
+        }
+
+        componentLoaded = true;
+        loadStory(url, sc.storyId, sc.story, sc.theme);
+      };
+
+      app.ontoolcancelled = function() {
+        if (componentLoaded) {
+          showCompletedState();
+        }
+      };
+
+      app.onerror = function(e) {
+        window._dl('app-error', { error: String(e) });
+      };
+
+      app.connect();
+    })();
+  </script>
+</body>
+</html>
