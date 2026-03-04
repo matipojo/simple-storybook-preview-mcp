@@ -10,7 +10,7 @@
     "type": "git",
     "url": "https://github.com/matipojo/simple-storybook-preview-mcp.git"
   },
-  "homepage": "https://github.com/matipojo/simple-storybook-preview-mcp",
+  "homepage": "https://matipojo.github.io/simple-storybook-preview-mcp/",
   "bugs": {
     "url": "https://github.com/matipojo/simple-storybook-preview-mcp/issues"
   },
@@ -18,7 +18,8 @@
     "dist",
     "static/storybook.html",
     "static/storybook.css",
-    "static/debug.css"
+    "static/debug.css",
+    "README.md"
   ],
   "scripts": {
     "build": "tsc && shx chmod +x dist/server.js && esbuild static/app-entry.ts --bundle --format=iife --platform=browser --outfile=dist/mcp-app-bundle.js --minify",
