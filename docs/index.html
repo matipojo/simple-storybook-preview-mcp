@@ -79,18 +79,282 @@
 
     .badge.accent { background: var(--badge-bg); color: var(--badge-text); border-color: transparent; }
 
-    .hero-image {
+    .hero-demo {
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
       margin: 0 auto 60px;
       max-width: 100%;
       box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+      background: #1e1e1e;
+      font-family: 'SF Mono', 'Fira Code', Menlo, monospace;
+      font-size: 13px;
+      line-height: 1.6;
     }
 
-    .hero-image img {
-      width: 100%;
+    .demo-titlebar {
+      background: #2d2d2d;
+      padding: 8px 16px;
+      font-size: 12px;
+      color: #8b949e;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .demo-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .demo-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
       display: block;
+    }
+
+    .demo-dots span:nth-child(1) { background: #ff5f57; }
+    .demo-dots span:nth-child(2) { background: #febc2e; }
+    .demo-dots span:nth-child(3) { background: #28c840; }
+
+    .demo-body {
+      padding: 20px;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .demo-prompt {
+      background: #252830;
+      border: 1px solid #3a3f4b;
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeSlideIn 0.5s ease forwards;
+    }
+
+    .demo-prompt .prompt-icon {
+      color: #a78bfa;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .demo-diff-group {
+      opacity: 0;
+      animation: fadeSlideIn 0.4s ease forwards;
+      animation-delay: 1.2s;
+    }
+
+    .demo-diff-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 12px;
+    }
+
+    .demo-diff-header .file-icon { color: #58a6ff; }
+    .demo-diff-header .file-name { color: #e6edf3; }
+    .demo-diff-header .diff-stat { color: #3fb950; }
+
+    .demo-diff {
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 6px;
+      padding: 10px 14px;
+      overflow: hidden;
+    }
+
+    .demo-diff .line { white-space: pre; }
+    .demo-diff .line-removed { color: #f85149; background: rgba(248,81,73,0.1); margin: 0 -14px; padding: 0 14px; }
+    .demo-diff .line-added { color: #3fb950; background: rgba(63,185,80,0.1); margin: 0 -14px; padding: 0 14px; }
+    .demo-diff .line-context { color: #8b949e; }
+
+    .demo-diff-group-2 {
+      opacity: 0;
+      animation: fadeSlideIn 0.4s ease forwards;
+      animation-delay: 2.2s;
+    }
+
+    .demo-tool-call {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #1c2129;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 13px;
+      opacity: 0;
+      animation: fadeSlideIn 0.4s ease forwards;
+      animation-delay: 3.2s;
+    }
+
+    .demo-tool-call .tool-icon {
+      width: 20px;
+      height: 20px;
+      background: #a78bfa;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .demo-tool-call .tool-label {
+      color: #e6edf3;
+      font-weight: 500;
+    }
+
+    .demo-tool-call .tool-server {
+      color: #8b949e;
+      font-size: 12px;
+    }
+
+    .demo-tool-call .tool-chevron {
+      margin-left: auto;
+      color: #8b949e;
+      font-size: 16px;
+    }
+
+    .demo-preview {
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeSlideIn 0.5s ease forwards;
+      animation-delay: 4s;
+    }
+
+    .demo-preview-header {
+      background: #f6f8fa;
+      border-bottom: 1px solid #d0d7de;
+      padding: 12px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .demo-preview-title {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1f2328;
+    }
+
+    .demo-preview-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .demo-preview-badge.large { background: #ddf4ff; color: #0969da; }
+
+    .demo-preview-meta {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 11px;
+      color: #656d76;
+      margin-top: 2px;
+    }
+
+    .demo-preview-meta span strong { color: #1f2328; font-weight: 500; }
+
+    .demo-preview-tags {
+      width: 100%;
+      display: flex;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .demo-preview-tag {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f6f8fa;
+      border: 1px solid #d0d7de;
+      color: #656d76;
+    }
+
+    .demo-preview-canvas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 120px;
+      padding: 32px;
+    }
+
+    .demo-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 24px;
+      border-radius: 24px;
+      border: 1px solid #d0d7de;
+      background: #fff;
+      color: #1f2328;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: default;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    .demo-btn .chevron {
+      font-size: 10px;
+      color: #656d76;
+    }
+
+    .demo-response {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 13px;
+      color: #e6edf3;
+      padding: 8px 0;
+      opacity: 0;
+      animation: fadeSlideIn 0.4s ease forwards;
+      animation-delay: 5s;
+    }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .demo-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 14px;
+      background: #a78bfa;
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
     }
 
     section {
@@ -270,8 +534,83 @@
       </div>
     </header>
 
-    <div class="hero-image">
-      <img src="image.png" alt="Storybook Preview MCP in action inside Cursor IDE">
+    <div class="hero-demo" id="heroDemo">
+      <div class="demo-titlebar">
+        <div class="demo-dots"><span></span><span></span><span></span></div>
+        Large button icon customization
+      </div>
+      <div class="demo-body">
+        <div class="demo-prompt">
+          <span class="prompt-icon">&#9670;</span>
+          change the large button to have an optional icon
+        </div>
+
+        <div class="demo-diff-group">
+          <div class="demo-diff-header">
+            <span class="file-icon">#</span>
+            <span class="file-name">button.css</span>
+            <span class="diff-stat">+7 -1</span>
+          </div>
+          <div class="demo-diff">
+            <div class="line line-context">  .storybook-button {</div>
+            <div class="line line-removed">-   display: inline-block;</div>
+            <div class="line line-added">+   align-items: center;</div>
+            <div class="line line-added">+   display: inline-flex;</div>
+            <div class="line line-context">    ...</div>
+          </div>
+        </div>
+
+        <div class="demo-diff-group-2">
+          <div class="demo-diff-header">
+            <span class="file-icon">&#9881;</span>
+            <span class="file-name">Button.stories.tsx</span>
+            <span class="diff-stat">+14</span>
+          </div>
+          <div class="demo-diff">
+            <div class="line line-context">  const ChevronRightIcon = () =&gt; (</div>
+            <div class="line line-added">+   &lt;svg fill="none" ...</div>
+            <div class="line line-context">  ...</div>
+            <div class="line line-context">      backgroundColor: { control: 'color' },</div>
+            <div class="line line-added">+     icon: { control: false },</div>
+            <div class="line line-context">  },</div>
+          </div>
+        </div>
+
+        <div class="demo-tool-call">
+          <div class="tool-icon">&#9889;</div>
+          <span class="tool-label">Ran Render Component</span>
+          <span class="tool-server">in storybook-preview</span>
+          <span class="tool-chevron">&#8964;</span>
+        </div>
+
+        <div class="demo-preview">
+          <div class="demo-preview-header">
+            <span class="demo-preview-title">Example/Button</span>
+            <span class="demo-preview-badge large">Large</span>
+            <div class="demo-preview-meta">
+              <span><strong>file</strong> ./src/stories/Button.tsx</span>
+              <span><strong>story</strong> ./src/stories/Button.stories.tsx</span>
+              <span><strong>export</strong> Large</span>
+            </div>
+            <div class="demo-preview-tags">
+              <span class="demo-preview-tag">dev</span>
+              <span class="demo-preview-tag">test</span>
+              <span class="demo-preview-tag">manifest</span>
+              <span class="demo-preview-tag">autodocs</span>
+            </div>
+          </div>
+          <div class="demo-preview-canvas">
+            <div class="demo-btn">
+              <span class="chevron">&#9656;</span>
+              Button
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-response">
+          The large button now supports an optional icon.<span class="demo-cursor"></span>
+        </div>
+      </div>
     </div>
 
     <section>
