@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Storybook Preview MCP</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-2: #1c2129;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-secondary: #8b949e;
+      --accent: #58a6ff;
+      --accent-hover: #79c0ff;
+      --green: #3fb950;
+      --code-bg: #0d1117;
+      --badge-bg: #1f6feb;
+      --badge-text: #fff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    header {
+      padding: 60px 0 40px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+
+    header h1 span { color: var(--accent); }
+
+    header p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto 28px;
+    }
+
+    .badges {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .badge.accent { background: var(--badge-bg); color: var(--badge-text); border-color: transparent; }
+
+    .hero-image {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 0 auto 60px;
+      max-width: 100%;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    }
+
+    .hero-image img {
+      width: 100%;
+      display: block;
+    }
+
+    section {
+      margin-bottom: 56px;
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 24px 0 8px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p { margin-bottom: 12px; color: var(--text-secondary); }
+    p strong { color: var(--text); }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+      font-size: 13px;
+    }
+
+    pre code { color: var(--text); }
+
+    :not(pre) > code {
+      background: var(--surface);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--accent);
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .step {
+      display: flex;
+      gap: 16px;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .step-content { flex: 1; min-width: 0; }
+    .step-content h4 { font-size: 16px; margin-bottom: 6px; color: var(--text); }
+    .step-content p { margin-bottom: 8px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    td { color: var(--text); }
+    td code { color: var(--accent); }
+    td:last-child { color: var(--text-secondary); }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .feature {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .feature-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .feature h4 {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .feature p {
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .example-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .example-block h4 {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { color: var(--accent-hover); }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><span>Storybook Preview</span> MCP</h1>
+      <p>See your components render live inside the IDE as the AI edits them. No switching windows.</p>
+      <div class="badges">
+        <span class="badge accent">MCP Apps</span>
+        <span class="badge">TypeScript</span>
+        <span class="badge">Cursor IDE</span>
+        <span class="badge">Storybook 7+</span>
+      </div>
+    </header>
+
+    <div class="hero-image">
+      <img src="image.png" alt="Storybook Preview MCP in action inside Cursor IDE">
+    </div>
+
+    <section>
+      <h2>Quick Start</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>Add to your MCP config</h4>
+            <p>Add this to <code>.cursor/mcp.json</code> in your project root:</p>
+<pre><code>{
+  "mcpServers": {
+    "storybook-preview": {
+      "command": "npx",
+      "args": ["-y", "simple-storybook-preview-mcp"],
+      "env": {
+        "STORYBOOK_URL": "http://localhost:6006"
+      }
+    }
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>Start your Storybook dev server</h4>
+<pre><code>npm run storybook</code></pre>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>Ask the AI to edit a component</h4>
+            <p>The preview panel appears automatically whenever the AI modifies a component that has a Storybook story. No manual action needed.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Full Example</h2>
+      <p>Here's a complete walkthrough from zero to live preview.</p>
+
+      <div class="example-block">
+        <h4>Project structure</h4>
+<pre><code>my-app/
+  .cursor/
+    mcp.json          &larr; MCP config goes here
+  src/
+    components/
+      Button.tsx       &larr; your component
+    stories/
+      Button.stories.tsx  &larr; Storybook story
+  .storybook/
+    main.ts
+  package.json</code></pre>
+      </div>
+
+      <div class="example-block">
+        <h4>Button.tsx</h4>
+<pre><code>interface ButtonProps {
+  label: string;
+  variant?: 'primary' | 'secondary';
+  size?: 'small' | 'medium' | 'large';
+  onClick?: () =&gt; void;
+}
+
+export function Button({ label, variant = 'primary', size = 'medium', onClick }: ButtonProps) {
+  return (
+    &lt;button
+      className={`btn btn-${variant} btn-${size}`}
+      onClick={onClick}
+    &gt;
+      {label}
+    &lt;/button&gt;
+  );
+}</code></pre>
+      </div>
+
+      <div class="example-block">
+        <h4>Button.stories.tsx</h4>
+<pre><code>import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from '../components/Button';
+
+const meta: Meta&lt;typeof Button&gt; = {
+  title: 'Components/Button',
+  component: Button,
+  argTypes: {
+    variant: { control: 'select', options: ['primary', 'secondary'] },
+    size: { control: 'select', options: ['small', 'medium', 'large'] },
+  },
+};
+
+export default meta;
+type Story = StoryObj&lt;typeof Button&gt;;
+
+export const Primary: Story = {
+  args: { label: 'Click me', variant: 'primary' },
+};
+
+export const Secondary: Story = {
+  args: { label: 'Cancel', variant: 'secondary' },
+};
+
+export const Large: Story = {
+  args: { label: 'Big Button', size: 'large' },
+};</code></pre>
+      </div>
+
+      <div class="example-block">
+        <h4>.cursor/mcp.json</h4>
+<pre><code>{
+  "mcpServers": {
+    "storybook-preview": {
+      "command": "npx",
+      "args": ["-y", "simple-storybook-preview-mcp"],
+      "env": {
+        "STORYBOOK_URL": "http://localhost:6006"
+      }
+    }
+  }
+}</code></pre>
+      </div>
+
+      <div class="example-block">
+        <h4>What happens</h4>
+        <p>When you ask the AI: <strong>"change the Button to have rounded corners and a hover animation"</strong></p>
+        <p>1. The AI edits <code>Button.tsx</code></p>
+        <p>2. It automatically calls <code>render_component</code> with storyId <code>"components-button--primary"</code></p>
+        <p>3. An inline preview panel appears showing the live Storybook render</p>
+        <p>4. You see the result immediately without leaving the IDE</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Configuration</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Env Variable</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>STORYBOOK_URL</code></td>
+            <td><code>http://localhost:6006</code></td>
+            <td>Base URL of your running Storybook dev server</td>
+          </tr>
+          <tr>
+            <td><code>DEBUG</code></td>
+            <td><code>false</code></td>
+            <td>Set to <code>true</code> or <code>1</code> to show a debug log panel in the preview</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>How Story IDs Work</h2>
+      <p>The AI derives story IDs from your Storybook file structure. The pattern is:</p>
+<pre><code>title segments lowercased, joined by dashes
+  + double-dash
+  + story export name lowercased
+
+Examples:
+  title: "Components/Button"  export: "Primary"   &rarr; components-button--primary
+  title: "Forms/Input"        export: "WithLabel"  &rarr; forms-input--withlabel
+  title: "Layout/Sidebar"     export: "Collapsed"  &rarr; layout-sidebar--collapsed</code></pre>
+    </section>
+
+    <section>
+      <h2>Features</h2>
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">&#9889;</div>
+          <h4>Auto-preview</h4>
+          <p>Renders automatically after AI edits a component with a story</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">&#127912;</div>
+          <h4>Theme support</h4>
+          <p>Light and dark themes, follows OS preference or set explicitly</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">&#128196;</div>
+          <h4>Story metadata</h4>
+          <p>Shows component title, variant, file path, and tags</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">&#128274;</div>
+          <h4>CSP-safe</h4>
+          <p>Proper Content Security Policy for iframe embedding</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">&#128230;</div>
+          <h4>Zero config</h4>
+          <p>Works with npx, just set STORYBOOK_URL and go</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">&#128027;</div>
+          <h4>Debug mode</h4>
+          <p>Optional debug panel for troubleshooting MCP communication</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Requirements</h2>
+      <p><strong>Node.js 18+</strong> and a running <strong>Storybook 7+</strong> dev server. Works with any framework Storybook supports (React, Vue, Angular, Svelte, etc.).</p>
+      <p>Requires an IDE with <strong>MCP Apps</strong> support (e.g. Cursor).</p>
+    </section>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>
+        <a href="https://github.com/matipojo/simple-storybook-preview-mcp">GitHub</a> &middot;
+        <a href="https://www.npmjs.com/package/simple-storybook-preview-mcp">npm</a> &middot;
+        MIT License
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
