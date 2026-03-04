@@ -1,6 +1,6 @@
 {
   "name": "simple-storybook-preview-mcp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "MCP server that renders Storybook component previews inside the IDE",
   "type": "module",
   "bin": {
