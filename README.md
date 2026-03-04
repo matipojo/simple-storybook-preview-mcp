@@ -2,6 +2,8 @@
 
 See your components render live inside the IDE as the AI edits them. No switching windows.
 
+**[Documentation & Live Demo](https://matipojo.github.io/simple-storybook-preview-mcp/)**
+
 ![MCP Apps](https://img.shields.io/badge/MCP_Apps-blue) ![TypeScript](https://img.shields.io/badge/TypeScript-333?logo=typescript) ![Node 18+](https://img.shields.io/badge/Node-18%2B-green)
 
 ## Quick Start
