@@ -490,20 +490,32 @@
       margin: 0;
     }
 
-    .example-block {
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 20px;
+      border-radius: 8px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 16px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
     }
 
-    .example-block h4 {
-      font-size: 14px;
-      color: var(--text-secondary);
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .github-link:hover {
+      background: var(--surface-2);
+      border-color: var(--accent);
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .github-link svg {
+      fill: var(--text);
+      width: 20px;
+      height: 20px;
     }
 
     footer {
@@ -532,6 +544,10 @@
         <span class="badge">Cursor IDE</span>
         <span class="badge">Storybook 7+</span>
       </div>
+      <a href="https://github.com/matipojo/simple-storybook-preview-mcp" class="github-link">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+        View on GitHub
+      </a>
     </header>
 
     <div class="hero-demo" id="heroDemo">
@@ -650,101 +666,6 @@
             <p>The preview panel appears automatically whenever the AI modifies a component that has a Storybook story. No manual action needed.</p>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Full Example</h2>
-      <p>Here's a complete walkthrough from zero to live preview.</p>
-
-      <div class="example-block">
-        <h4>Project structure</h4>
-<pre><code>my-app/
-  .cursor/
-    mcp.json          &larr; MCP config goes here
-  src/
-    components/
-      Button.tsx       &larr; your component
-    stories/
-      Button.stories.tsx  &larr; Storybook story
-  .storybook/
-    main.ts
-  package.json</code></pre>
-      </div>
-
-      <div class="example-block">
-        <h4>Button.tsx</h4>
-<pre><code>interface ButtonProps {
-  label: string;
-  variant?: 'primary' | 'secondary';
-  size?: 'small' | 'medium' | 'large';
-  onClick?: () =&gt; void;
-}
-
-export function Button({ label, variant = 'primary', size = 'medium', onClick }: ButtonProps) {
-  return (
-    &lt;button
-      className={`btn btn-${variant} btn-${size}`}
-      onClick={onClick}
-    &gt;
-      {label}
-    &lt;/button&gt;
-  );
-}</code></pre>
-      </div>
-
-      <div class="example-block">
-        <h4>Button.stories.tsx</h4>
-<pre><code>import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from '../components/Button';
-
-const meta: Meta&lt;typeof Button&gt; = {
-  title: 'Components/Button',
-  component: Button,
-  argTypes: {
-    variant: { control: 'select', options: ['primary', 'secondary'] },
-    size: { control: 'select', options: ['small', 'medium', 'large'] },
-  },
-};
-
-export default meta;
-type Story = StoryObj&lt;typeof Button&gt;;
-
-export const Primary: Story = {
-  args: { label: 'Click me', variant: 'primary' },
-};
-
-export const Secondary: Story = {
-  args: { label: 'Cancel', variant: 'secondary' },
-};
-
-export const Large: Story = {
-  args: { label: 'Big Button', size: 'large' },
-};</code></pre>
-      </div>
-
-      <div class="example-block">
-        <h4>.cursor/mcp.json</h4>
-<pre><code>{
-  "mcpServers": {
-    "storybook-preview": {
-      "command": "npx",
-      "args": ["-y", "simple-storybook-preview-mcp"],
-      "env": {
-        "STORYBOOK_URL": "http://localhost:6006"
-      }
-    }
-  }
-}</code></pre>
-      </div>
-
-      <div class="example-block">
-        <h4>What happens</h4>
-        <p>When you ask the AI: <strong>"change the Button to have rounded corners and a hover animation"</strong></p>
-        <p>1. The AI edits <code>Button.tsx</code></p>
-        <p>2. It automatically calls <code>render_component</code> with storyId <code>"components-button--primary"</code></p>
-        <p>3. An inline preview panel appears showing the live Storybook render</p>
-        <p>4. You see the result immediately without leaving the IDE</p>
       </div>
     </section>
 
