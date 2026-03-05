@@ -437,11 +437,16 @@
     .step-content h4 { font-size: 16px; margin-bottom: 6px; color: var(--text); }
     .step-content p { margin-bottom: 8px; }
 
+    .table-wrap {
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 16px;
       font-size: 14px;
+      min-width: 400px;
     }
 
     th, td {
@@ -672,6 +677,7 @@
 
     <section>
       <h2>Configuration</h2>
+      <div class="table-wrap">
       <table>
         <thead>
           <tr>
@@ -693,6 +699,7 @@
           </tr>
         </tbody>
       </table>
+      </div>
     </section>
 
     <section>
