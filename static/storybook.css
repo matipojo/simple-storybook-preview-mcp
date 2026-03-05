@@ -87,10 +87,14 @@ html, body { width: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe
 }
 #story-header .meta-row {
   display: flex; gap: 16px; margin-top: 6px; color: var(--text-secondary); font-size: 11px;
+  flex-wrap: wrap;
 }
-#story-header .meta-item { display: flex; align-items: center; gap: 4px; }
-#story-header .meta-label { color: var(--text-tertiary); }
-#story-header .meta-value { color: var(--text-secondary); font-family: monospace; font-size: 11px; }
+#story-header .meta-item { display: flex; align-items: center; gap: 4px; min-width: 0; }
+#story-header .meta-label { color: var(--text-tertiary); white-space: nowrap; }
+#story-header .meta-value {
+  color: var(--text-secondary); font-family: monospace; font-size: 11px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
+}
 #story-header .tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
 #story-header .tag {
   font-size: 10px; padding: 1px 6px; border-radius: 8px;
